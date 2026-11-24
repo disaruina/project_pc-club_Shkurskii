@@ -4,14 +4,22 @@ public class Club
     public const int VipPrice = 175;
     public const int BootcampPrice = 1000;
 
-    public int Seatnumber; // отвечает за место в пк клубе
-    public string Zone; // отвечает за тариф компа
-    public int Balance; // баланс который тратится на часы
-    public int Hours; // часы сколько может посидеть человек за пк
-    public bool Busy; // место свободно да или нет
+    public int Seatnumber { get; private set; } // отвечает за место в пк клубе
+    public string Zone { get; private set; } // отвечает за тариф компа
+    public int Balance { get; private set; } // баланс который тратится на часы
+    public int Hours { get; private set; } // часы сколько может посидеть человек за пк
+    public bool Busy { get; private set; } // место свободно да или нет
 
     public Club(int balance, int hours, int seatnumber, string zone)
     {
+        if (balance < 0) balance = 0;
+        if (hours <= 0) hours = 1;
+        if (seatnumber <= 0) seatnumber = 1;
+        if (zone != "standard" && zone != "vip" && zone != "bootcamp")
+        {
+            zone = "standard";
+        }
+
         Balance = balance;
         Hours = hours;
         Seatnumber = seatnumber;
