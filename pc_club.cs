@@ -1,17 +1,50 @@
-using System.Reflection.Metadata;
-
 public class Club
 {
-    public int Seatnumber; // отвечает за место в пк клубе
-    public string Zone; // отвечает за зону в пк клубе випка или обычное 
-    public int Money_an_hour; // денег в час за место 
-    public bool Busy; // свободно ли место или нет
+    public const int StandardPrice = 140;
+    public const int VipPrice = 175;
+    public const int BootcampPrice = 1000;
 
-    public Club(int seatnumber, string zone, int money_an_hour)
+    public int Seatnumber; // отвечает за место в пк клубе
+    public string Zone; // отвечает за тариф компа
+    public int Balance; // баланс который тратится на часы
+    public int Hours; // часы сколько может посидеть человек за пк
+    public bool Busy; // место свободно да или нет
+
+    public Club(int balance, int hours, int seatnumber, string zone)
     {
+        Balance = balance;
+        Hours = hours;
         Seatnumber = seatnumber;
         Zone = zone;
-        Money_an_hour = money_an_hour;
         Busy = false;
+    }
+
+    public int Price() // возвращает стоимость часа в зависимости от тарифа
+    {
+        if (Zone == "vip") return VipPrice;
+        if (Zone == "bootcamp") return BootcampPrice;
+        return StandardPrice;
+    }
+
+    public void Start() // проверка хватает ли денег на то количество часов которое захотел пользователь 
+    {
+        if (Busy || Hours <= 0) return;
+
+        int totalCost = Price() * Hours;
+        if (Balance < totalCost)
+        {
+            Console.WriteLine($"Место №{Seatnumber}: недостаточно денег (нужно {totalCost} руб, на балансе {Balance} руб)");
+            return;
+        }
+
+        Balance -= totalCost;
+        Busy = true;
+        Console.WriteLine($"Место №{Seatnumber}: сессия запущена на {Hours} ч, остаток баланса: {Balance} руб");
+    }
+
+    public void AddHours(int DopHours) // добавление часов пользователю 
+    {
+        if (DopHours <= 0) return;
+        Hours += DopHours;
     }
 }
